@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Кофейня КиберКота</title>
+    <meta charset="utf-8">
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: auto; padding: 20px; }
+        input, button { padding: 10px; font-size: 16px; }
+        #results { margin-top: 20px; }
+        .drink { border: 1px solid #ccc; padding: 10px; margin: 5px; }
+        a { margin: 10px; color: #c06; }
+    </style>
+</head>
+<body>
+    <h1>☕ Кофейня КиберКота</h1>
+    <p><a href="/play">🎮 Мини-игра "Поймай мышку" (получи секретный напиток)</a></p>
+    <input type="text" id="search" placeholder="Поиск напитка...">
+    <button onclick="searchDrinks()">Искать</button>
+    <div id="results"></div>
+
+    <script>
+        async function searchDrinks() {
+            const query = document.getElementById('search').value;
+            const res = await fetch(`/order?search=${encodeURIComponent(query)}`);
+            const data = await res.json();
+            const div = document.getElementById('results');
+            div.innerHTML = '';
+            if (data.error) {
+                div.innerHTML = `<p>${data.error}</p>`;
+                return;
+            }
+            data.forEach(d => {
+                div.innerHTML += `<div class="drink"><strong>${d.name}</strong> - ${d.price} руб.</div>`;
+            });
+        }
+    </script>
+</body>
+</html>

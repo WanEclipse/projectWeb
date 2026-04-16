@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Поймай мышку</title>
+    <meta charset="utf-8">
+    <style>
+        #game-area { width: 400px; height: 300px; border: 2px solid black; position: relative; background: #f0f0f0; margin-top: 20px; }
+        #mouse { width: 40px; height: 40px; background: gray; border-radius: 50%; position: absolute; cursor: pointer; }
+        #score { font-size: 24px; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <h1>🐭 Поймай мышку!</h1>
+    <p>Набери 100 очков, чтобы открыть секретный напиток. Но мышка очень быстрая...</p>
+    <p>Счёт: <span id="score">0</span></p>
+    <div id="game-area">
+        <div id="mouse"></div>
+    </div>
+    <button onclick="resetGame()">Сбросить</button>
+    <p id="message" style="margin-top: 20px;"></p>
+
+    <script>
+        let score = 0;
+        const mouse = document.getElementById('mouse');
+        const area = document.getElementById('game-area');
+        const scoreSpan = document.getElementById('score');
+        const msg = document.getElementById('message');
+
+        function moveMouse() {
+            const maxX = area.clientWidth - mouse.clientWidth;
+            const maxY = area.clientHeight - mouse.clientHeight;
+            const x = Math.floor(Math.random() * maxX);
+            const y = Math.floor(Math.random() * maxY);
+            mouse.style.left = x + 'px';
+            mouse.style.top = y + 'px';
+        }
+
+        mouse.addEventListener('click', () => {
+            score++;
+            scoreSpan.textContent = score;
+            moveMouse();
+            if (score >= 100) {
+                msg.innerHTML = '🎉 Ура! Ты поймал 100 мышек! Секретный напиток твой.';
+                document.cookie = "game_won=1; path=/";
+                fetch('/flag')
+                    .then(r => r.json())
+                    .then(d => {
+                        if (d.flag) msg.innerHTML += `<br><strong>Флаг: ${d.flag}</strong>`;
+                    });
+                score = 0;
+                scoreSpan.textContent = score;
+            }
+        });
+
+        function resetGame() {
+            score = 0;
+            scoreSpan.textContent = score;
+            msg.innerHTML = '';
+            moveMouse();
+        }
+
+        setInterval(moveMouse, 1200);
+        moveMouse();
+    </script>
+    <p><a href="/">← Назад в кофейню</a></p>
+</body>
+</html>
