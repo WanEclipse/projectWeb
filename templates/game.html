@@ -11,7 +11,7 @@
 </head>
 <body>
     <h1>🐭 Поймай мышку!</h1>
-    <p>Набери 100 очков, чтобы открыть секретный напиток. Но мышка очень быстрая...</p>
+    <p>Набери 10000 очков, чтобы открыть секретный напиток. Но мышка очень быстрая...</p>
     <p>Счёт: <span id="score">0</span></p>
     <div id="game-area">
         <div id="mouse"></div>
@@ -39,7 +39,7 @@
             score++;
             scoreSpan.textContent = score;
             moveMouse();
-            if (score >= 100) {
+            if (score >= 10000) {
                 msg.innerHTML = '🎉 Ура! Ты поймал 100 мышек! Секретный напиток твой.';
                 document.cookie = "game_won=1; path=/";
                 fetch('/flag')
