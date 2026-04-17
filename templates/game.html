@@ -39,8 +39,8 @@
             score++;
             scoreSpan.textContent = score;
             moveMouse();
-            if (score >= 10000) {
-                msg.innerHTML = '🎉 Ура! Ты поймал 100 мышек! Секретный напиток твой.';
+            if (score >= 10000) {   // <-- ПОРОГ ИЗМЕНЁН НА 10000
+                msg.innerHTML = '🎉 Ура! Ты поймал 10000 мышек! Секретный напиток твой.';
                 document.cookie = "game_won=1; path=/";
                 fetch('/flag')
                     .then(r => r.json())
