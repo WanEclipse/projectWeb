@@ -8,7 +8,7 @@ def init_db():
     conn = sqlite3.connect('cafe.db')
     c = conn.cursor()
 
-    # Таблица с напитками (Web-флаг)
+    # Таблица с напитками (для Web-флага)
     c.execute('''CREATE TABLE IF NOT EXISTS drinks
                  (id INTEGER PRIMARY KEY, name TEXT, price REAL, secret_note TEXT)''')
     c.execute("DELETE FROM drinks")
@@ -46,7 +46,7 @@ def order():
         c.execute(query)
         results = c.fetchall()
         conn.close()
-        # Скрываем "Босс-кофе" из обычного вывода на странице
+        # Фильтруем вывод, чтобы скрыть "Босс-кофе"
         filtered = [{'name': r[0], 'price': r[1]} for r in results if r[0] != 'Босс-кофе']
         return jsonify(filtered)
     except Exception as e:
@@ -70,17 +70,8 @@ def play():
     return render_template('game.html')
 
 @app.route('/flag')
-def get_flag():
-    # Если админ – отдаём Web-флаг
-    if request.cookies.get('admin') == '1':
-        conn = sqlite3.connect('cafe.db')
-        c = conn.cursor()
-        c.execute("SELECT secret_note FROM drinks WHERE name='Босс-кофе'")
-        flag = c.fetchone()[0]
-        conn.close()
-        return jsonify({'flag': flag, 'category': 'web'})
-
-    # Если выиграна игра – отдаём Joy-флаг
+def get_flag_j():
+    # Joy-флаг для победителя игры
     if request.cookies.get('game_won') == '1':
         conn = sqlite3.connect('cafe.db')
         c = conn.cursor()

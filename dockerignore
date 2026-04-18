@@ -1,0 +1,8 @@
+venv
+cafe.db
+__pycache__
+*.pyc
+.env
+.venv
+.idea
+pip_packages
